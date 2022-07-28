@@ -78,6 +78,7 @@ app.get("/", async (req, res) => {
     SELECT post_description, post_created_at, account_name 
     FROM post JOIN account 
     ON post_owner_id = account_id
+    ORDER BY post_created_at DESC
   `;
   const posts = (await db.query(query)).rows;
   res.render("index", { posts, user: req.user });

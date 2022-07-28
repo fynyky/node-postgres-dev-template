@@ -5,8 +5,13 @@ block append vars
 
 block main
   .container
-    h1.title post table
-    ul
-      each row in posts
-        li= JSON.stringify(row)
+    each post in posts
+      article.box
+        p= post.post_description
+        strong= post.account_name
+        | &nbsp
+        small= post.post_created_at
+
+    //- h1.title post table
+    //- ul
 
