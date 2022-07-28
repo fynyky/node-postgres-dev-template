@@ -3,8 +3,7 @@
  * 6 | @import "../../../node_modules/bulma/bulma.sass";
  *   |                                                 ^
  *   '
- *   src/server/sass/base.sass 6:49  @import
- *   src/server/sass/index.sass 1:9  root stylesheet */
+ *   src/server/sass/base.sass 6:49  root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -14,5 +13,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: semicolons aren't allowed in the indented syntax.\a   \2577 \a 6 \2502  @import \"../../../node_modules/bulma/bulma.sass\";\a   \2502                                                  ^\a   \2575 \a   src/server/sass/base.sass 6:49  @import\a   src/server/sass/index.sass 1:9  root stylesheet";
+  content: "Error: semicolons aren't allowed in the indented syntax.\a   \2577 \a 6 \2502  @import \"../../../node_modules/bulma/bulma.sass\";\a   \2502                                                  ^\a   \2575 \a   src/server/sass/base.sass 6:49  root stylesheet";
 }
