@@ -53,35 +53,37 @@ html
       link(href=stylesheet, rel="stylesheet")
   body
     block body
-      header
+      header.navbar
         block header
           .container
-            .navbar
-              .navbar-brand
-                a.navbar-item(href="/")
-                  img(src="/logo.png" width=92 height=28)
-                a.navbar-burger(role="button"  aria-label="menu" aria-expanded="false" data-target="navbarBasicExample")
-                  span(aria-hidden="true")
-                  span(aria-hidden="true")
-                  span(aria-hidden="true")
+            .navbar-brand
+              a.navbar-item(href="/")
+                img(src="/logo.png" width=92 height=28)
+              a.navbar-burger(role="button"  aria-label="menu" aria-expanded="false" data-target="navbarBasicExample")
+                span(aria-hidden="true")
+                span(aria-hidden="true")
+                span(aria-hidden="true")
 
-              .navbar-menu
-                .navbar-start
-                  .navbar-item
-                    a.button.is-primary(href="/post")
-                      | Post a message
-                .navbar-end
-                  .navbar-item
-                    .buttons
-                      if user
-                        form(action="logout" method="POST")
-                          button.button.is-light(type="submit") 
-                            | Logout
-                      if !user
-                        a.button.is-primary(href="/register")
-                          strong Register
-                        a.button.is-light(href="/login")
-                          | Log in
+            .navbar-menu
+              .navbar-start
+                .navbar-item
+                  a.button.is-primary(href="/post")
+                    | Post a message
+                    
+              .navbar-end
+                .navbar-item
+                  .buttons
+                    if user
+                      a.button(href="/account")
+                        span.icon-text
+                          span.icon 
+                            i.fas.fa-user
+                          span Account
+                    if !user
+                      a.button.is-primary(href="/register")
+                        strong Register
+                      a.button.is-light(href="/login")
+                        | Log in
 
       main
         block main
