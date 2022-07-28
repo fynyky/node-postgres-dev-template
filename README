@@ -13,7 +13,7 @@ Template & guide for the development & deployment of a basic production app
 - Redis for sessions? (TBD)
 - App server running express (auto scaling?)
   - sass stuff
-  - 
+
 
 # Deployment infrastructure (TBD)
 - Digital ocean (compose/swarm/manual config)
@@ -27,3 +27,8 @@ Template & guide for the development & deployment of a basic production app
 - Install Docker Desktop
 - Install VS Code
 - Install TablePlus (or whatever DB admin tool)
+- Docker Dev Environment -> Initialize it with the git repo
+- Check website on localhost
+- Open app container in vs code from docker dev
+- Run npm run dev
+- Make changes
