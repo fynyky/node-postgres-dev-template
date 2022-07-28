@@ -1,6 +1,7 @@
 extends base.pug
-block append head 
-  link(href="/index.css", rel="stylesheet")
+
+block append vars
+  - var stylesheet='/index.css'
 
 block main
   .container

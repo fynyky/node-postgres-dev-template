@@ -1,8 +1,11 @@
 extends base.pug
 block main
-  h1 post table
-  form(action="post" method="POST")
-    div 
-      label(for="description") Description
-      input(type="text" id="description" name="description")
-    button(type="submit") Make post
+  .container
+    h1.title Post a new message
+    form(action="post" method="POST")
+      .field
+        .control 
+          textarea.textarea(type='text' id="description" name="description" placeholder='Text input')
+      .field
+        .control
+          button.button(type="submit") Make post

@@ -2,6 +2,7 @@ block vars
   - var title='base.pug'
   - var description="base.pug description";
   - var image='https://via.placeholder.com/1200x630.png'
+  - var stylesheet='/base.css'
 
 doctype html
 html 
@@ -48,7 +49,7 @@ html
       //- meta(name='msapplication-TileColor', content='#ffffff')
       //- meta(name='msapplication-TileImage', content='/ms-icon-144x144.png')
       //- meta(name='theme-color', content='#ffffff')
-          
+      link(href=stylesheet, rel="stylesheet")
   body
     block body
       header
@@ -64,6 +65,10 @@ html
                   span(aria-hidden="true")
 
               .navbar-menu
+                .navbar-start
+                  .navbar-item
+                    a.button.is-primary(href="/post")
+                      | Post a message
                 .navbar-end
                   .navbar-item
                     .buttons
@@ -73,7 +78,7 @@ html
                             | Logout
                       if !user
                         a.button.is-primary(href="/register")
-                          strong Sign up
+                          strong Register
                         a.button.is-light(href="/login")
                           | Log in
 
