@@ -24,13 +24,3 @@ services:
       - 1337:1337
     depends_on:
       - db
-
-  db-admin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "postgres@email.com"
-      PGADMIN_DEFAULT_PASSWORD: "postgres"
-    ports:
-        - "1111:80"
-    depends_on:
-        - db
