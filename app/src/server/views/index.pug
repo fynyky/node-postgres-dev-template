@@ -1,11 +1,11 @@
 extends base.pug
+block append head 
+  link(href="/index.css", rel="stylesheet")
+
 block main
-  h1 account table
-  ul
-    each row in accounts
-      li= JSON.stringify(row)
-  h1 post table
-  ul
-    each row in posts
-      li= JSON.stringify(row)
+  .container
+    h1.title post table
+    ul
+      each row in posts
+        li= JSON.stringify(row)
 

@@ -74,9 +74,13 @@ const auth = new Auth(passport, db).init();
 app.use(express.static(publicPath));
 
 app.get("/", async (req, res) => {
-  const accounts = (await db.query("SELECT * FROM account")).rows;
-  const posts = (await db.query("SELECT * FROM post")).rows;
-  res.render("index", { accounts, posts, user: req.user });
+  const query = `
+    SELECT post_description, post_created_at, account_name 
+    FROM post JOIN account 
+    ON post_owner_id = account_id
+  `;
+  const posts = (await db.query(query)).rows;
+  res.render("index", { posts, user: req.user });
 });
 
 app.get("/account", auth.check, async (req, res) => {
