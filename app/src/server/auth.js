@@ -72,12 +72,26 @@ export default class Auth {
   authenticate(config) {
     return this.#passport.authenticate("local", config);
   }
-  check(req, res, next) {
-    if (req.isAuthenticated()) return next();
-    else res.redirect("/login");
+  check(redirectPath) {
+    return (req, res, next) => {
+      if (req.isAuthenticated()) return next();
+      else {
+        // Store the target URL for after login completes
+        // Will be cleared after use
+        req.session.targetUrl = req.originalUrl;
+        res.redirect(redirectPath);
+      }
+    }
   }
-  checkNot(req, res, next) {
-    if (req.isAuthenticated()) return res.redirect("/");
-    else next();
+  checkNot(redirectPath) {
+    return (req, res, next) => {
+      if (req.isAuthenticated()) {
+        // Store the target URL for after login completes
+        // Will be cleared after use
+        req.session.targetUrl = req.originalUrl;
+        return res.redirect(redirectPath);
+      }
+      else next();
+    }
   }
 }

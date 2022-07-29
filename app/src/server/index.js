@@ -84,16 +84,16 @@ app.get("/", async (req, res) => {
   res.render("index", { posts, user: req.user });
 });
 
-app.get("/account", auth.check, async (req, res) => {
+app.get("/account", auth.check("/login"), async (req, res) => {
   res.render("account", { user: req.user });
 });
 
-app.get("/post", auth.check, async (req, res) => {
+app.get("/post", auth.check("/login"), async (req, res) => {
   const results = (await db.query("SELECT * FROM post")).rows;
   res.render("post", { results, user: req.user });
 });
 
-app.post("/post", auth.check, async (req, res) => {
+app.post("/post", auth.check("/login"), async (req, res) => {
   const owner = req.user.account_id;
   const description = req.body.description;
   const query = `
@@ -105,30 +105,38 @@ app.post("/post", auth.check, async (req, res) => {
   res.redirect("/");
 });
 
-app.get("/register", auth.checkNot, async (req, res) => {
+app.get("/register", auth.checkNot("/"), async (req, res) => {
   res.render("register", { user: req.user });
 });
-app.post("/register", auth.checkNot, async (req, res) => {
+app.post("/register", auth.checkNot("/"), async (req, res) => {
   await auth.registerUser(req.body.name, req.body.password);
   res.redirect("/login");
 });
 
-app.get("/login", auth.checkNot, async (req, res) => {
+app.get("/login", auth.checkNot("/"), async (req, res) => {
   res.render("login", { user: req.user });
 });
+
 app.post(
   "/login",
-  auth.checkNot,
-  auth.authenticate({
-    successRedirect: "/",
-    failureRedirect: "/login",
-  })
+  auth.checkNot("/"),
+  (req, res, next) => {
+    let targetUrl = "/";
+    if (req.session.targetUrl) {
+      targetUrl = req.session.targetUrl;
+      delete req.session.targetUrl;
+    }
+    return auth.authenticate({
+      successRedirect: targetUrl,
+      failureRedirect: "/login",
+    })(req, res, next);
+  }
 );
 
 app.post("/logout", (req, res) => {
   req.logout((err) => {
     if (err) next(err);
-    else res.redirect("/");
+    else res.redirect("back");
   });
 });
 
