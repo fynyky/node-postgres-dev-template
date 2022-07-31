@@ -8,6 +8,8 @@ import url from "url";
 import passport from "passport";
 import path from "path";
 import pg from "pg";
+import redis from "redis";
+import connectRedis from "connect-redis";
 import waitOn from "wait-on";
 import Auth from "./auth.js";
 
@@ -25,7 +27,9 @@ const DB_USER = process.env.DB_USER ? process.env.DB_USER : "postgres";
 const DB_PASSWORD = process.env.DB_PASSWORD
   ? process.env.DB_PASSWORD
   : "postgres";
-
+const CACHE_HOST = process.env.CACHE_HOST ? process.env.CACHE_HOST : "cache";
+const CACHE_PORT = process.env.CACHE_PORT ? process.env.CACHE_PORT : 6379;
+  
 // -----------------------------------------------------------------------------
 // Initialization
 // -----------------------------------------------------------------------------
@@ -35,7 +39,6 @@ console.log(`Waiting on database availability ${DB_HOST}:${DB_PORT}`);
 await waitOn({
   resources: [`tcp:${DB_HOST}:${DB_PORT}`],
 });
-console.log(`Database available at ${DB_HOST}:${DB_PORT}`);
 const db = new pg.Pool({
   host: DB_HOST,
   port: DB_PORT,
@@ -43,6 +46,22 @@ const db = new pg.Pool({
   user: DB_USER,
   password: DB_PASSWORD,
 });
+console.log(`Database available at ${DB_HOST}:${DB_PORT}`);
+
+
+// Setup cache connection
+console.log(`Waiting on cache availability ${CACHE_HOST}:${CACHE_PORT}`);
+await waitOn({
+  resources: [`tcp:${CACHE_HOST}:${CACHE_PORT}`],
+});
+const RedisStore = connectRedis(session);
+const redisClient = redis.createClient({ 
+  legacyMode: true,
+  url: `redis://${CACHE_HOST}:${CACHE_PORT}`
+});
+await redisClient.connect()
+console.log(`Cache available ${CACHE_HOST}:${CACHE_PORT}`);
+
 // Setup the main application stack
 console.log("Initializing app server");
 const app = express();
@@ -59,6 +78,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(flash());
 app.use(
   session({
+    store: new RedisStore({ client: redisClient }),
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
