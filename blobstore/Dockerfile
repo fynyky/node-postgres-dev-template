@@ -1,3 +1,3 @@
 FROM minio/minio
-CMD minio server /data --console-address ":9001"
+CMD ["server", "/data", "--console-address", ":9001"]
 
