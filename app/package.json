@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "express-flash": "^0.0.2",
     "express-session": "^1.17.3",
+    "minio": "^7.0.29",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.3",

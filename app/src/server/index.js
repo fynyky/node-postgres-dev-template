@@ -5,6 +5,7 @@ import express from "express";
 import flash from "express-flash";
 import session from "express-session";
 import url from "url";
+import minio from "minio";
 import passport from "passport";
 import path from "path";
 import pg from "pg";
@@ -27,6 +28,11 @@ const DB_USER = process.env.DB_USER ? process.env.DB_USER : "postgres";
 const DB_PASSWORD = process.env.DB_PASSWORD
   ? process.env.DB_PASSWORD
   : "postgres";
+const BLOB_HOST = process.env.BLOB_HOST ? process.env.BLOB_HOST : "blobstore";
+const BLOB_PORT = process.env.BLOB_PORT ? process.env.BLOB_PORT : 9000;
+const BLOB_USER = process.env.BLOB_USER ? process.env.BLOB_USER : "minioadmin";
+const BLOB_PASSWORD = process.env.BLOB_PASSWORD ? process.env.BLOB_PASSWORD : "minioadmin";
+
 const CACHE_HOST = process.env.CACHE_HOST ? process.env.CACHE_HOST : "cache";
 const CACHE_PORT = process.env.CACHE_PORT ? process.env.CACHE_PORT : 6379;
   
@@ -48,6 +54,19 @@ const db = new pg.Pool({
 });
 console.log(`Database available at ${DB_HOST}:${DB_PORT}`);
 
+// Setup blobstore connection
+console.log(`Waiting on blobstore availability ${BLOB_HOST}:${BLOB_PORT}`);
+await waitOn({
+  resources: [`tcp:${BLOB_HOST}:${BLOB_PORT}`],
+});
+var minioClient = new minio.Client({
+  endPoint: BLOB_HOST,
+  port: BLOB_PORT,
+  accessKey: BLOB_USER,
+  secretKey: BLOB_PASSWORD,
+  useSSL: false
+});
+console.log(`Blobstore available at ${BLOB_HOST}:${BLOB_PORT}`);
 
 // Setup cache connection
 console.log(`Waiting on cache availability ${CACHE_HOST}:${CACHE_PORT}`);
