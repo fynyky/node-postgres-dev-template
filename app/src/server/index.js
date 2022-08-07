@@ -6,11 +6,13 @@ import flash from "express-flash";
 import session from "express-session";
 import url from "url";
 import minio from "minio";
+import multer from "multer";
 import passport from "passport";
 import path from "path";
 import pg from "pg";
 import redis from "redis";
 import connectRedis from "connect-redis";
+import { v4 as uuid } from "uuid";
 import waitOn from "wait-on";
 import Auth from "./auth.js";
 
@@ -32,7 +34,7 @@ const BLOB_HOST = process.env.BLOB_HOST ? process.env.BLOB_HOST : "blobstore";
 const BLOB_PORT = process.env.BLOB_PORT ? process.env.BLOB_PORT : 9000;
 const BLOB_USER = process.env.BLOB_USER ? process.env.BLOB_USER : "minioadmin";
 const BLOB_PASSWORD = process.env.BLOB_PASSWORD ? process.env.BLOB_PASSWORD : "minioadmin";
-
+const BLOB_BUCKET = process.env.BLOB_BUCKET ? process.env.BLOB_BUCKET : "images";
 const CACHE_HOST = process.env.CACHE_HOST ? process.env.CACHE_HOST : "cache";
 const CACHE_PORT = process.env.CACHE_PORT ? process.env.CACHE_PORT : 6379;
   
@@ -67,6 +69,43 @@ var minioClient = new minio.Client({
   useSSL: false
 });
 console.log(`Blobstore available at ${BLOB_HOST}:${BLOB_PORT}`);
+// Stores a file with a random filename
+class MinioMulterStorage {
+  #client;
+  #bucket;
+  constructor(opts) {
+    this.#client = opts.client;
+    this.#bucket = opts.bucket;
+  }
+  _handleFile(req, file, cb) {
+    const key = uuid();
+    this.#client.putObject(
+      this.#bucket,
+      key,
+      file.stream,
+      (err, result) => {
+        if (err) cb(err);
+        cb(null, {
+          bucket: this.#bucket,
+          key: key,
+          etag: result.etag,
+          versionId: result.versionId,
+        });
+      }
+    );
+  }
+  _removeFile(req, file, cb) {
+    this.#client.removeObject(file.bucket, file.key, cb);
+  }
+}
+// Multer for express middleware  it
+const upload = multer({
+  storage: new MinioMulterStorage({
+    client: minioClient,
+    bucket: BLOB_BUCKET
+  })
+});
+
 
 // Setup cache connection
 console.log(`Waiting on cache availability ${CACHE_HOST}:${CACHE_PORT}`);
@@ -132,7 +171,8 @@ app.get("/post", auth.check("/login"), async (req, res) => {
   res.render("post", { results, user: req.user });
 });
 
-app.post("/post", auth.check("/login"), async (req, res) => {
+app.post("/post", auth.check("/login"), upload.single('file'), async (req, res) => {
+  console.log("posting a file", req.file);
   const owner = req.user.account_id;
   const description = req.body.description;
   const query = `
@@ -144,6 +184,7 @@ app.post("/post", auth.check("/login"), async (req, res) => {
   res.redirect("/");
 });
 
+
 app.get("/register", auth.checkNot("/"), async (req, res) => {
   res.render("register", { user: req.user });
 });
@@ -151,7 +192,6 @@ app.post("/register", auth.checkNot("/"), async (req, res) => {
   await auth.registerUser(req.body.name, req.body.password);
   res.redirect("/login");
 });
-
 app.get("/login", auth.checkNot("/"), async (req, res) => {
   res.render("login", { user: req.user });
 });

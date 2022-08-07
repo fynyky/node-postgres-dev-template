@@ -2,10 +2,13 @@ extends base.pug
 block main
   .container
     h1.title Post a new message
-    form(action="post" method="POST")
+    form(action="post" method="POST" enctype="multipart/form-data")
       .field
         .control 
           textarea.textarea(type='text' id="description" name="description" placeholder='Text input')
+      .field
+        .control
+        input(type='file' id="file" name="file" accept="image/png, image/jpeg")
       .field
         .control
           button.button(type="submit") Make post
