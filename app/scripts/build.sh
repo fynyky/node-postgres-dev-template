@@ -1,3 +1,3 @@
 #!/bin/bash
 rm -rf dist/
-cp -rf src/server/ dist/
+cp -rf src/ dist/

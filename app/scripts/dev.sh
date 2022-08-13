@@ -1,2 +1,2 @@
 #!/bin/bash
-sass --watch src/server/sass:src/server/public & nodemon src/server/index.js
+sass --watch src/sass:src/server/public & nodemon src/index.js

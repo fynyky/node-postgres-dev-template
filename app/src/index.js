@@ -35,7 +35,6 @@ const BLOB_PORT = process.env.BLOB_PORT ? process.env.BLOB_PORT : 9000;
 const BLOB_USER = process.env.BLOB_USER ? process.env.BLOB_USER : "minioadmin";
 const BLOB_PASSWORD = process.env.BLOB_PASSWORD ? process.env.BLOB_PASSWORD : "minioadmin";
 const BLOB_BUCKET = process.env.BLOB_BUCKET ? process.env.BLOB_BUCKET : "uploads";
-const 
 const CACHE_HOST = process.env.CACHE_HOST ? process.env.CACHE_HOST : "cache";
 const CACHE_PORT = process.env.CACHE_PORT ? process.env.CACHE_PORT : 6379;
   
