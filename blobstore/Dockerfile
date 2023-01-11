@@ -12,7 +12,7 @@ RUN minio server /buckets & \
     done; \
     # Make default bucket
     mc mb local/uploads; \
-    mc policy set download local/uploads; \
+    mc anonymous set download local/uploads; \
     # Close the server now that we're done configuring
     kill $server_pid
 CMD ["server", "/buckets", "--console-address", ":9001"]
