@@ -3,7 +3,7 @@ Template & guide for the development & deployment of a basic production app
 # Development environment
 - Local docker compose cluster for an isolated dev environment
 - VS Code as an IDE for connecting to the dev machines
-- Prettier auto linting (TBD)
+- Standard JS for linting and formatting
 - Local testing (TBD)
 - Git branching startegy (TBD)
 - CI/CD strategy (TBD)

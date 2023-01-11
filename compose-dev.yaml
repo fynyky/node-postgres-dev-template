@@ -24,15 +24,7 @@ services:
     build: cache
     ports:
       - 6379:6379
-
-  search:
-    build: search
-    environment:
-      discovery.type: "single-node"
-    ports:
-      - 9200:9200 
-      - 9300:9300 
-
+      
   app:
     build: app
     environment:

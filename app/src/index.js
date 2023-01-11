@@ -77,7 +77,6 @@ class MinioMulterStorage {
     this.#client = opts.client
     this.#bucket = opts.bucket
   }
-
   _handleFile (req, file, cb) {
     const key = uuid()
     this.#client.putObject(
@@ -100,7 +99,7 @@ class MinioMulterStorage {
     this.#client.removeObject(file.bucket, file.key, cb)
   }
 }
-// Multer for express middleware  it
+// Multer for express middleware it
 const upload = multer({
   storage: new MinioMulterStorage({
     client: minioClient,
