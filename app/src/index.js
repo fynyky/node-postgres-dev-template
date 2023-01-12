@@ -24,19 +24,19 @@ const SESSION_SECRET = process.env.SESSION_SECRET
   ? process.env.SESSION_SECRET
   : 'keyboardCat'
 const DB_HOST = process.env.DB_HOST ? process.env.DB_HOST : 'db'
-const DB_PORT = process.env.DB_PORT ? process.env.DB_PORT : 5432
+const DB_PORT = process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432
 const DB_USER = process.env.DB_USER ? process.env.DB_USER : 'postgres'
 const DB_PASSWORD = process.env.DB_PASSWORD
   ? process.env.DB_PASSWORD
   : 'postgres'
 const DB_NAME = process.env.DB_NAME ? process.env.DB_NAME : 'postgres'
 const BLOB_HOST = process.env.BLOB_HOST ? process.env.BLOB_HOST : 'blobstore'
-const BLOB_PORT = process.env.BLOB_PORT ? process.env.BLOB_PORT : 9000
+const BLOB_PORT = process.env.BLOB_PORT ? parseInt(process.env.BLOB_PORT) : 9000
 const BLOB_USER = process.env.BLOB_USER ? process.env.BLOB_USER : 'minioadmin'
 const BLOB_PASSWORD = process.env.BLOB_PASSWORD ? process.env.BLOB_PASSWORD : 'minioadmin'
 const BLOB_BUCKET = process.env.BLOB_BUCKET ? process.env.BLOB_BUCKET : 'uploads'
 const CACHE_HOST = process.env.CACHE_HOST ? process.env.CACHE_HOST : 'cache'
-const CACHE_PORT = process.env.CACHE_PORT ? process.env.CACHE_PORT : 6379
+const CACHE_PORT = process.env.CACHE_PORT ? parseInt(process.env.CACHE_PORT) : 6379
 const CACHE_PASSWORD = process.env.CACHE_PASSWORD ? process.env.CACHE_PASSWORD : 'foobared'
 
 // -----------------------------------------------------------------------------
