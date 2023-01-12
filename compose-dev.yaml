@@ -22,6 +22,7 @@ services:
   
   cache:
     build: cache
+    # password defined in redis.conf file
     ports:
       - 6379:6379
       
@@ -31,9 +32,17 @@ services:
       PORT: 1337
       DB_HOST: "db"
       DB_PORT: 5432
-      DB_NAME: "postgres"
       DB_USER: "postgres"
       DB_PASSWORD: "postgres"
+      DB_NAME: "postgres"
+      BLOB_HOST: "blobstore"
+      BLOB_PORT: 9000
+      BLOB_USER: "minioadmin"
+      BLOB_PASSWORD: "minioadmin"
+      BLOB_BUCKET: "uploads"
+      CACHE_HOST: "cache"
+      CACHE_PORT: 6379
+      CACHE_PASSWORD: "foobared"
     ports:
       - 1337:1337
     depends_on:
