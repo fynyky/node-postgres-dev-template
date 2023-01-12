@@ -40,6 +40,7 @@ services:
       BLOB_USER: "minioadmin"
       BLOB_PASSWORD: "minioadmin"
       BLOB_BUCKET: "uploads"
+      BLOB_PATH: "http://localhost:9000/uploads/"
       CACHE_HOST: "cache"
       CACHE_PORT: 6379
       CACHE_PASSWORD: "foobared"

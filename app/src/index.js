@@ -35,6 +35,7 @@ const BLOB_PORT = process.env.BLOB_PORT ? parseInt(process.env.BLOB_PORT) : 9000
 const BLOB_USER = process.env.BLOB_USER ? process.env.BLOB_USER : 'minioadmin'
 const BLOB_PASSWORD = process.env.BLOB_PASSWORD ? process.env.BLOB_PASSWORD : 'minioadmin'
 const BLOB_BUCKET = process.env.BLOB_BUCKET ? process.env.BLOB_BUCKET : 'uploads'
+const BLOB_PATH = process.env.BLOB_PATH ? process.env.BLOB_PATH : 'http://localhost:9000/uploads/';
 const CACHE_HOST = process.env.CACHE_HOST ? process.env.CACHE_HOST : 'cache'
 const CACHE_PORT = process.env.CACHE_PORT ? parseInt(process.env.CACHE_PORT) : 6379
 const CACHE_PASSWORD = process.env.CACHE_PASSWORD ? process.env.CACHE_PASSWORD : 'foobared'
@@ -155,12 +156,15 @@ app.use(express.static(publicPath))
 
 app.get('/', async (req, res) => {
   const query = `
-    SELECT post_description, post_created_at, account_name 
+    SELECT post_description, post_created_at, post_image_key, account_name 
     FROM post JOIN account 
     ON post_owner_id = account_id
     ORDER BY post_created_at DESC
   `
   const posts = (await db.query(query)).rows
+  posts.forEach(post => {
+    post.post_image_key = `${BLOB_PATH}${post.post_image_key}`
+  })
   res.render('index', { posts, user: req.user })
 })
 
@@ -177,12 +181,13 @@ app.post('/post', auth.check('/login'), upload.single('file'), async (req, res) 
   console.log('posting a file', req.file)
   const owner = req.user.account_id
   const description = req.body.description
+  const image = req.file.key
   const query = `
-    INSERT INTO post(post_owner_id, post_description) 
-    VALUES ($1, $2) 
+    INSERT INTO post(post_owner_id, post_description, post_image_key) 
+    VALUES ($1, $2, $3) 
     RETURNING *
   `
-  await db.query(query, [owner, description])
+  await db.query(query, [owner, description, image])
   res.redirect('/')
 })
 
