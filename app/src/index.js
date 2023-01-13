@@ -161,9 +161,14 @@ app.get('/', async (req, res) => {
     ON post_owner_id = account_id
     ORDER BY post_created_at DESC
   `
-  const posts = (await db.query(query)).rows
-  posts.forEach(post => {
-    post.post_image_key = `${BLOB_PATH}${post.post_image_key}`
+  const result = await db.query(query)
+  const posts = result.rows.map(row => {
+    return {
+      owner: row.account_name, 
+      description: row.post_description,
+      timestamp: row.post_created_at,
+      imageURL: `${BLOB_PATH}${row.post_image_key}`
+    }
   })
   res.render('index', { posts, user: req.user })
 })

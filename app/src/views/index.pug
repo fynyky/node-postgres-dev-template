@@ -7,12 +7,9 @@ block main
   .container
     each post in posts
       article.box
-        img(src=post.post_image_key)
-        p= post.post_description
-        strong= post.account_name
+        img(src=post.imageURL)
+        p= post.description
+        strong= post.owner
         | &nbsp
-        small= post.post_created_at
-
-    //- h1.title post table
-    //- ul
+        small= post.timestamp
 
