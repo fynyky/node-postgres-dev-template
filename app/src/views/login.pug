@@ -1,4 +1,9 @@
 extends base.pug
+
+block append vars
+  - var stylesheet='/login.css'
+  - var script='/login.js'
+
 block main
   .container
     h1.title Login

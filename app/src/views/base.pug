@@ -3,6 +3,7 @@ block vars
   - var description="base.pug description";
   - var image='https://via.placeholder.com/1200x630.png'
   - var stylesheet='/base.css'
+  - var script='/base.js'
 
 doctype html
 html 
@@ -51,6 +52,8 @@ html
       //- meta(name='theme-color', content='#ffffff')
       link(href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css", rel="stylesheet")
       link(href=stylesheet, rel="stylesheet")
+      script(src=script)
+
   body
     block body
       header.navbar

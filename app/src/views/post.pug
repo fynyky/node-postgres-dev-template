@@ -1,4 +1,9 @@
 extends base.pug
+
+block append vars
+  - var stylesheet='/post.css'
+  - var script='/post.js'
+
 block main
   .container
     h1.title Post a new message
